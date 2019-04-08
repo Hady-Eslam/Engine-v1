@@ -25,7 +25,6 @@ class CoreEngine{
 	}
 
 	private function TurnEngineOn(){
-		register_shutdown_function('Core\CoreEngine::Register_ShutDown');
 		new ErrorsHandlerEngine();
 		new DefinesEngine('WebSiteEngine');
 		$this->LoadConfigs();
@@ -55,8 +54,11 @@ class CoreEngine{
 	}
 
 	function BeginView(){
-		//$GLOBALS['_Queries_'] = new ModelsQueriesEngine();
-		//$GLOBALS['QueriesResults_'] = [];
+		if ( is_array($this->ViewPath) ){
+			$this->Render = $this->ViewPath;
+			return ;
+		}
+		
 		$Views = new ViewsEngine($GLOBALS['_Configs_']['_AppConfigs_']['VIEWS'],
 			$this->ViewPath, $this->Values);
 		$this->Render = $Views->TurnViewOn($this->Request);
@@ -67,9 +69,5 @@ class CoreEngine{
 		$Template->FlushTemplate(
 			$Template->BeginParsing()
 		);
-	}
-
-	static function Register_ShutDown(){
-		$Error = error_get_last();
 	}
 }

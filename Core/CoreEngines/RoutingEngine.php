@@ -34,7 +34,7 @@ class RoutingEngine{
 				$Key = strval($Key);
 			
 				if ( $Key === '404' )
-					$GLOBALS['_Configs_']['_RoutingConfigs_']['404'] = $Value;
+					$this->Put404Page($Value);
 
 				else if ( $Key === '<int>' || $Key === '<string>' || $Key === '<double>'){
 					if ( $this->CheckRegularExpresion($Key, $URLPart[0]) ){
@@ -50,29 +50,26 @@ class RoutingEngine{
 					break;
 				}
 			}
-
+			
 			if ( !$Matched )
-				$this->NotMatchedRouting($Matched_Value);
-			else
+				return $this->ErrorPage;
+			else{
 				if ( sizeof($URLPart) == 1 ){
 					if ( is_string($Matched_Value ) )
 						return $Matched_Value;
-					$this->NotMatchedRouting($Matched_Value);
+					
+					else if ( array_key_exists('', $Matched_Value) )
+						return $Matched_Value[''];
+
+					return $this->ErrorPage;
 				}
 				else
 					if ( is_string($Matched_Value) )
-						$this->NotMatchedRouting($Matched_Value);
+						return $this->ErrorPage;
+			}
 			$this->Schema = $Matched_Value;
 			$this->URL = $URLPart[1];
 		}
-	}
-
-	private function NotMatchedRouting($Matched_Value){
-		if ( !file_exists($GLOBALS['_Configs_']['_RoutingConfigs_']['404']) )
-			include_once $this->MainErrorPage;
-		else
-			include_once $GLOBALS['_Configs_']['_RoutingConfigs_']['404'];
-		exit();
 	}
 
 	private function CheckRegularExpresion($Key, $URL){
@@ -88,5 +85,12 @@ class RoutingEngine{
 			return True;
 		}
 		return False;
+	}
+
+	private function Put404Page($Value){
+		if ( array_slice(explode('.', $Value), -1)[0]  == 'php' )
+			$this->ErrorPage = [$Value, [], '404'];
+		else
+			$this->ErrorPage = $Value;
 	}
 }

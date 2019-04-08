@@ -2,56 +2,21 @@
 
 return [
 	
-	404 => _DIR_.'/404.php',
+	404 => '/404.Error',
 
-	'Register' => [
+	'OverView' => 'OverView.OverView',
 
-		404 => _DIR_.'/404.php',
+	'DownLoad' => 'DownLoad.DownLoad',
 
-		'SignUP' => '',
-		'SuccessSignUP' => '',
-		'ConfirmUser' => '',
+	'Documentation' => [
+		'' => 'Documentation/Documentation.Documentation',
 
-		'Login' => 'HelloPost',
-		'ForgetPassword' => '',
-		'ReSetPassword' => ''
-	],
-
-	'DO' => [
-		'Find' => '',
-		'Advertise' => '',
-		'Predict' => '',
-		'interested' => '',
-		'Post' => [
-			'<int>' => [
-				'<double>' => 'Hello.Post'
-			],
-			'<double>' => 'Hello.Post'
-		]
-	],
-
-	'Services' => [
-		'Help' => '',
-		'Privacy' => '',
-		'AboutMe' => ''
-	],
-
-	'Profile' => [
-		'Settings' => '',
-		'User' => [
-			'' => '',
-			'<int>' => ''
-		],
-		'MyProfile' => '',
-		'Notifications' => ''
-	],
-
-	'BackEnd' => [
-		'CheckUser' => '',
-		'LogOut' => '',
-		'DeletePost' => '',
-		'MakeComment' => '',
-		'MakeLike_DisLike' => 'Hello'
-	],
+		'MakeApp' => 'Documentation/MakeApp.MakeApp',
+		'Routing' => 'Documentation/Routing.Routing',
+		'Views' => 'Documentation/Views.Views',
+		'Forms' => 'Documentation/Forms.Forms',
+		'DataBase' => 'Documentation/DataBase.DataBase',
+		'Templates' => 'Documentation/Templates.Templates'
+	]
 ]
 ?>

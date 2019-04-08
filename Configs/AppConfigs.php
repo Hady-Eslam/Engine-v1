@@ -29,5 +29,7 @@ return [
 
 	'TEMPLATES' => _DIR_.'/Templates/',
 
-	'TEMPLATES_FILTERS' => _DIR_.'/TemplatesFilters/'
+	'TEMPLATES_FILTERS' => _DIR_.'/TemplatesFilters/',
+
+	'PUBLIC' => _DIR_.'/Public/',
 ];

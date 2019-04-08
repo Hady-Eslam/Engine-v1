@@ -2,7 +2,6 @@
 
 namespace Core;
 use Exceptions\ViewsExceptionsEngine;
-use Core\OutPutEngine;
 
 class ViewsEngine{
 	
@@ -21,17 +20,21 @@ class ViewsEngine{
 
 		if ( $this->ViewsPath == '' )
 			$this->ViewsPath = _DIR_.'/Views/';
-		include_once $this->ViewsPath.$View[0].'.php';
+		else if ( !file_exists($this->ViewsPath.$View[0].'.php') )
+			throw new ViewsExceptionsEngine("View Not Found in Path ( ".
+					$this->ViewsPath.$View[0].'.php'." )");
+		else
+			include_once $this->ViewsPath.$View[0].'.php';
+
 
 		if ( !function_exists($View[1]) )
-			throw new ViewsExceptionsEngine('View Not Found');
+			throw new ViewsExceptionsEngine('View Function Not Found');
 		$this->ViewName = $View[1];
 	}
 
 	function TurnViewOn($Request){
 		array_unshift($this->Values, $Request);
 		$Render = call_user_func_array($this->ViewName, $this->Values);
-		//$OutPut->OpenOutPut();
 		return $Render;
 	}
 }

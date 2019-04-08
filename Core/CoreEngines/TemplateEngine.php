@@ -6,12 +6,18 @@ use Exceptions\TemplateExceptionsEngine;
 class TemplateEngine{
 
 	function __construct($Render){
-		if ( sizeof($Render) != 2 )
-			throw new TemplateExceptionsEngine('Render Should return Only Two Parameters');
+		$this->Render = $Render;
+		if ( is_string($Render) )
+			$this->Type = 'String';
+		else{
+			$this->Type = 'Another';
+			if ( sizeof($Render) != 2 && sizeof($Render) != 3 )
+				throw new TemplateExceptionsEngine('Render Should return Only Two Parameters');
 
-		$this->TemplatePath = $Render[0];
-		$this->TemplateValues = $Render[1];
-		$this->CheckArgs();
+			$this->TemplatePath = $Render[0];
+			$this->TemplateValues = $Render[1];
+			$this->CheckArgs();
+		}
 	}
 
 	private function CheckArgs(){
@@ -21,12 +27,22 @@ class TemplateEngine{
 		else if ( !is_array($this->TemplateValues) )
 			throw new TemplateExceptionsEngine('Template Args Should Be Array');
 		
-		if ( file_exists(
+		if ( sizeof($this->Render) == 3 ){
+
+			if ( file_exists($this->Render[0]) )
+				$this->File = file_get_contents($this->Render[0]);
+			else
+				throw new TemplateExceptionsEngine(
+							'Error Page Not Found Check if Path is Correct');
+		}
+		else if ( file_exists(
 				$GLOBALS['_Configs_']['_AppConfigs_']['TEMPLATES'].$this->TemplatePath ) )
 			$this->File = file_get_contents(
 				$GLOBALS['_Configs_']['_AppConfigs_']['TEMPLATES'].$this->TemplatePath);
 		else
-			throw new TemplateExceptionsEngine('Template Not Found Check if Path is Correct');
+			throw new TemplateExceptionsEngine('Template Not Found Check if Path ('.
+					$GLOBALS['_Configs_']['_AppConfigs_']['TEMPLATES'].$this->TemplatePath
+					.') is Correct');
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////
@@ -34,6 +50,9 @@ class TemplateEngine{
 	/////////////////////////////////////////////////////////////////////////////////
 
 	function BeginParsing(){
+		if ( $this->Type == 'String' )
+			return $this->Render;
+
 		return preg_replace_callback('/\<\< (.*) \>\>/', function ($Text){
 			return $this->Filter_Data($Text[1]);
 		}, $this->File);
@@ -126,7 +145,7 @@ class TemplateEngine{
 		else if ( 
 			!file_exists($GLOBALS['_Configs_']['_AppConfigs_']['TEMPLATES'].ltrim($Text[1])) )
 			throw new TemplateExceptionsEngine(
-					"Template ($Text[1]) Not Found in Template Folder");
+					"Template ( $Text[1] ) Not Found in Template Folder");
 
 		return preg_replace_callback('/\<\< (.*) \>\>/', function ($Text){
 			return $this->Filter_Data($Text[1]);
