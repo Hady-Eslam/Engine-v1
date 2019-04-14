@@ -11,7 +11,7 @@ class ImageFieldEngine extends FieldEngine{
 	public $Type = 'Image';
 	public $Constraints = [
 		'Require' => True,
-		'Max_Length' => 1 * 1000 * 1000,
+		'Max_Length' => 2 * 1000 * 1000,
 		'Min_Length' => 0,
 		'File_Extensions' => [
 			'jpeg',
@@ -30,9 +30,9 @@ class ImageFieldEngine extends FieldEngine{
 
 	function SetReturn($File){
 		
-		if ( $File['size'] > $this->Constraints['Max_Length'] || $File['error'] != 0 ||
-			 $File['size'] < $this->Constraints['Min_Length'] || $File['tmp_name'] == '' ||
-			 $File['name'] == '' ){
+		if ( $File['size'] > $this->Constraints['Max_Length'] || $File['error'] !== 0 ||
+			 $File['size'] < $this->Constraints['Min_Length'] || $File['tmp_name'] === '' ||
+			 $File['name'] === '' ){
 
 			if ( $this->Constraints['Default'] === 0 )
 				return False;
@@ -49,7 +49,7 @@ class ImageFieldEngine extends FieldEngine{
 			}
 		}
 		else{
-			if ( sizeof($this->Constraints['File_Extensions']) == 0 )
+			if ( sizeof($this->Constraints['File_Extensions']) === 0 )
 				$this->Constraints['File_Extensions'] = [
 					'jpeg',
 					'jpg',

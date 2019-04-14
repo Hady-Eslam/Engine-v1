@@ -26,9 +26,9 @@ class FileFieldEngine extends FieldEngine{
 	function SetReturn($File){
 		
 		var_dump($File);
-		if ( $File['size'] > $this->Constraints['Max_Length'] || $File['error'] != 0 ||
-			 $File['size'] < $this->Constraints['Min_Length'] || $File['tmp_name'] == '' ||
-			 $File['name'] == '' ){
+		if ( $File['size'] > $this->Constraints['Max_Length'] || $File['error'] !== 0 ||
+			 $File['size'] < $this->Constraints['Min_Length'] || $File['tmp_name'] === '' ||
+			 $File['name'] === '' ){
 
 
 			if ( $this->Constraints['Default'] === 0 )
@@ -46,7 +46,7 @@ class FileFieldEngine extends FieldEngine{
 			}
 		}
 		else{
-			if ( sizeof($this->Constraints['File_Extensions']) != 0 && !in_array(
+			if ( sizeof($this->Constraints['File_Extensions']) !== 0 && !in_array(
 					strtolower ( pathinfo( $File['name'], PATHINFO_EXTENSION ) ),
 					$this->Constraints['File_Extensions']) ){
 				

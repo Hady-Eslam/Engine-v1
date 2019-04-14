@@ -35,7 +35,7 @@ class MultiSelectFieldEngine extends FieldEngine{
 			if ( !empty($Value) && strlen($Value) >= $this->Constraints['Min_Length'] && 
 								strlen($Value) <= $this->Constraints['Max_Length'] ){
 				
-				if ( $this->Constraints['Options'] != [] ){
+				if ( $this->Constraints['Options'] !== [] ){
 
 					if ( in_array($Value, $this->Constraints['Options']) )
 						$Filtered_Values[] = $Value;

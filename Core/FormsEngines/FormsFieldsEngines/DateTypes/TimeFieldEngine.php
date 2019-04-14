@@ -27,7 +27,7 @@ class TimeFieldEngine extends FieldEngine{
 			$this->Value = $Value;
 			return True;
 		}
-		else if ( $this->Constraints['Default'] == 0 )
+		else if ( $this->Constraints['Default'] === 0 )
 			return False;
 		else{
 			$this->Value = $this->Constraints['Default'];

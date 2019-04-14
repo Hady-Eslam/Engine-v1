@@ -32,7 +32,7 @@ class BooleanFieldEngine extends FieldEngine{
 			return True;
 		}
 
-		else if ( $this->Constraints['Default'] != '' ){
+		else if ( $this->Constraints['Default'] !== '' ){
 			$this->Value = $this->Constraints['Default'];
 			return True;
 		}

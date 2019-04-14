@@ -1,13 +1,10 @@
 <?php
 
-function Error(){
-	//return '<p>Hello From Here</p>';
-	return ['404.html', [
+use SiteEngines\SiteRenderEngine;
 
-		'Title' => 'Not Found',
+include_once _DIR_.'/Configs/Configs.php';
+include_once Session;
 
-		'AllPagesCSS' => '/Public/CSS/AllPagesCSS.CSS',
-
-		'LOGO' => '/Public/Pictures/LOGO.jpg'
-	]];
+function Begin(){
+	return (new SiteRenderEngine())->Not_Found_Page();
 }

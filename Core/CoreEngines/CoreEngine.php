@@ -7,6 +7,7 @@ use ErrorsHandlers\ErrorsHandlerEngine;
 use Configs\AppConfigsEngine;
 use Configs\RoutingConfigsEngine;
 use Configs\ModelConfigsEngine;
+use Configs\LazyLoaderConfigsEngine;
 
 use Core\RoutingEngine;
 use Core\RequestsEngine;
@@ -39,6 +40,9 @@ class CoreEngine{
 		
 		$GLOBALS['_Configs_']['_ModelConfigs_'] =
 				new ModelConfigsEngine(_DIR_.'/Configs/ModelConfigs.php');
+
+		$GLOBALS['_Configs_']['_LazyLoaderConfigs_'] =
+				new LazyLoaderConfigsEngine(_DIR_.'/Configs/LazyLoaderConfigs.php');
 	}
 
 	function BeginRouting(){
@@ -58,7 +62,7 @@ class CoreEngine{
 			$this->Render = $this->ViewPath;
 			return ;
 		}
-		
+
 		$Views = new ViewsEngine($GLOBALS['_Configs_']['_AppConfigs_']['VIEWS'],
 			$this->ViewPath, $this->Values);
 		$this->Render = $Views->TurnViewOn($this->Request);

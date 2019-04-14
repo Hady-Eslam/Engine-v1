@@ -9,9 +9,9 @@ class FieldEngine{
 
 		if ( $this->ClassType == 'IntegerTypes' )
 			if ( $this->Type == 'Integer' )
-				$this->Check_MinMaxLength();
+				$this->Check_Integer_Values();
 			else
-				$this->Check_MinMaxLength('Decimal', 20);
+				$this->Check_Decimal_Values();
 
 		else if ( $this->ClassType == 'StringTypes' )
 			if ( $this->Type == 'Char' )
@@ -43,6 +43,41 @@ class FieldEngine{
 
 		else if ( $this->Constraints['Max_Length'] > $Max_Length )
 			throw new FormsExceptionsEngine("Max Length For $Type Types Should Be $Max_Length");
+	}
+
+	private function Check_Integer_Values(){
+		$this->Check_MinMaxLength();
+
+		if ( $this->Constraints['Min_Value'] != '' &&
+			strlen($this->Constraints['Min_Value']) > $this->Constraints['Min_Length'] )
+			throw new FormsExceptionsEngine('Min Value ( '.$this->Constraints['Min_Value']
+				.' ) Length Should Be Less Than Or Equal To Min Length ( '.
+				$this->Constraints['Min_Length'].' )');
+
+		if ( $this->Constraints['Max_Value'] != '' &&
+			strlen($this->Constraints['Max_Value']) > $this->Constraints['Max_Length'] )
+			throw new FormsExceptionsEngine('Max Value ( '.$this->Constraints['Max_Value']
+				.' ) Length Should Be Less Than Or Equal To Max Length ( '.
+				$this->Constraints['Max_Length'].' )');
+	}
+
+	private function Check_Decimal_Values(){
+		$this->Check_MinMaxLength('Decimal', 20);
+		
+		if ( $this->Constraints['Min_Value'] != '' &&
+			strlen(explode('.', $this->Constraints['Min_Value'])[0]) >
+				$this->Constraints['Min_Length'] )
+			throw new FormsExceptionsEngine('Min Value ( '.$this->Constraints['Min_Value']
+				.' ) Length Should Be Less Than Or Equal To Min Length ( '.
+				$this->Constraints['Min_Length'].' )');
+
+		if ( $this->Constraints['Max_Value'] != '' &&
+			strlen(explode('.', $this->Constraints['Max_Value'])[0]) >
+				$this->Constraints['Max_Length'] )
+
+			throw new FormsExceptionsEngine('Max Value ( '.$this->Constraints['Max_Value']
+				.' ) Length Should Be Less Than Or Equal To Max Length ( '.
+				$this->Constraints['Max_Length'].' )');
 	}
 
 	private function Check_DateTypes(){
@@ -79,7 +114,7 @@ class FieldEngine{
 		if ( $this->Type == 'File' )
 			$this->Check_MinMaxLength('File', 1 * 1000 * 1000 * 1000 );
 		else{
-			$this->Check_MinMaxLength('Image', 1 * 1000 * 1000 );
+			$this->Check_MinMaxLength('Image', 2 * 1000 * 1000 );
 
 			foreach ($this->Constraints['File_Extensions'] as $Key => $Extension){
 				$Extension = strtolower($Extension);
@@ -97,9 +132,31 @@ class FieldEngine{
 	///////////////////////////////////////////////////////////////////////////////////////
 
 	function NotSetReturn(){
+		if ( $this->ClassType == 'IntegerTypes' )
+			return $this->NotSetReturn_Integer();
+		else
+			return $this->NotSetReturn_All();
+	}
+
+	private function NotSetReturn_Integer(){
+
 		if ( $this->Constraints['Require'] == True )
 			return False;
-		$this->Value = NULL;
+		else if ( $this->Constraints['Default'] !== '' )
+			$this->Value = $this->Constraints['Default'];
+		else
+			$this->Value = NULL;
+		return True;
+	}
+
+	private function NotSetReturn_All(){
+		
+		if ( $this->Constraints['Require'] == True )
+			return False;
+		else if ( $this->Constraints['Default'] !== 0 )
+			$this->Value = $this->Constraints['Default'];
+		else
+			$this->Value = NULL;
 		return True;
 	}
 }

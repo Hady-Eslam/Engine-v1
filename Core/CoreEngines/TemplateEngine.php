@@ -61,6 +61,7 @@ class TemplateEngine{
 	private function Filter_Data($TextBefore){
 		$Text = explode(':', $TextBefore);
 
+
 		if ( $Text[0] == 'include ' )
 			return $this->include($Text);
 
@@ -108,7 +109,7 @@ class TemplateEngine{
 		$Args = [];
 		foreach ($Text[2] as $Value) {
 			$Value = ltrim(rtrim($Value));
-			if ( substr($Value, 0, 1) == '"' && substr($Value, strlen($Value)-2, 1) )
+			if ( substr($Value, 0, 1) == '"' && substr($Value, strlen($Value)-2, 1) == '"' )
 				array_push($Args, $Value);
 			else
 				if ( isset($this->TemplateValues[$Value]) )
@@ -119,8 +120,11 @@ class TemplateEngine{
 		$Values = call_user_func_array($Text[1], $Args);
 		if ( !is_string($Values) )
 			throw new TemplateExceptionsEngine(
-				"Filters Functions Must Return Only String Values");
-		return $Values;
+				"Filters Functions ($Text[1]) Must Return Only String Values");
+
+		return preg_replace_callback('/\<\< (.*) \>\>/', function ($Text){
+			return $this->Filter_Data($Text[1]);
+		},	$Values );
 	}
 
 	private function TemplateFilter_2($Text){
@@ -132,8 +136,11 @@ class TemplateEngine{
 		$Values = call_user_func(ltrim(rtrim($Text[1])));
 		if ( !is_string($Values) )
 			throw new TemplateExceptionsEngine(
-				"Filters Functions Must Return Only String Values");
-		return $Values;	
+				"Filters Functions ($Text[1]) Must Return Only String Values");
+
+		return preg_replace_callback('/\<\< (.*) \>\>/', function ($Text){
+			return $this->Filter_Data($Text[1]);
+		},	$Values );	
 
 	}
 
@@ -160,5 +167,6 @@ class TemplateEngine{
 	function FlushTemplate($Template){
 		//print_r($Template);
 		echo $Template;
+		//var_dump($Template);
 	}
 }

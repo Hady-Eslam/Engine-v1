@@ -7,7 +7,7 @@
 	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteRule ^(.*)$ Engine.php [L]
 
-	RewriteCond %{HTTP_HOST} ^engine-document.com$ 
+	RewriteCond %{HTTP_HOST} ^lookandsee.com$ 
 	RewriteRule ^(/)?$ Engine.php [L]
 	
 </IfModule>

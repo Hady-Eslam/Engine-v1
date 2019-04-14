@@ -12,6 +12,8 @@ class IntegerFieldEngine extends FieldEngine{
 	public $Constraints = [
 		'Require' => True,
 		'Default' => '',
+		'Min_Value' => '',
+		'Max_Value' => '',
 		'Min_Length' => 0,
 		'Max_Length' => 9
 	];
@@ -25,12 +27,22 @@ class IntegerFieldEngine extends FieldEngine{
 	function SetReturn($Value){
 		$Value = filter_var( $Value, FILTER_VALIDATE_INT );
 		
+		
 		if ( $Value != False && strlen($Value) >= $this->Constraints['Min_Length'] && 
 								strlen($Value) <= $this->Constraints['Max_Length'] ){
+
+			if ( $this->Constraints['Min_Value'] !== '' &&
+				$Value < $this->Constraints['Min_Value'] )
+				return False;
+			
+			if ( $this->Constraints['Max_Value'] !== '' &&
+				$Value > $this->Constraints['Max_Value'] )
+				return False;
+			
 			$this->Value = $Value;
 			return True;
 		}
-		else if ( $this->Constraints['Default'] == '' )
+		else if ( $this->Constraints['Default'] === '' )
 			return False;
 		else{
 			$this->Value = $this->Constraints['Default'];

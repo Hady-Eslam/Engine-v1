@@ -26,7 +26,7 @@ use Exceptions\FormsExceptionsEngine;
 
 class FormsFieldsEngine{
 
-
+	// Make Put Default Value if Require is False
 	private static $BooleanConstraintsArray = [
 		'Require' => True,
 		'Default' => False
@@ -35,6 +35,8 @@ class FormsFieldsEngine{
 	private static $IntegerConstraintsArray = [
 		'Require' => True,
 		'Default' => 0,
+		'Min_Value' => 0,
+		'Max_Value' => 0,
 		'Min_Length' => 0,
 		'Max_Length' => 9
 	];
@@ -42,6 +44,8 @@ class FormsFieldsEngine{
 	private static $DecimalConstraintsArray = [
 		'Require' => True,
 		'Default' => 10.5,
+		'Min_Value' => 0.0,
+		'Max_Value' => 0.0,
 		'Min_Length' => 0,
 		'Max_Length' => 20
 	];

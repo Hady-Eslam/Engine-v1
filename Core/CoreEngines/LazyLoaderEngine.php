@@ -1,5 +1,6 @@
 <?php
 namespace Core;
+use Exceptions\LazyLoaderExceptionsEngine;
 
 class LazyLoaderEngine{
 
@@ -62,6 +63,9 @@ class LazyLoaderEngine{
 
 		else if ( $Name[0] == 'Manibulations' )
 			require_once _DIR_.'/Core/ManibulationsEngines/'.$Name[1].'.php';
+
+		else
+			self::CheckRegistered($Name);
 	}
 
 	private static function ModelFields($Name){
@@ -117,6 +121,15 @@ class LazyLoaderEngine{
 
 		else
 			require_once _DIR_.'/Core/FormsEngines/FormsFieldsEngines/'.$Name[1].'.php';
+	}
+
+	private static function CheckRegistered($Name){
+		if ( isset($GLOBALS['_Configs_']['_LazyLoaderConfigs_']['Register'][$Name[0]]) )
+			require_once $GLOBALS['_Configs_']['_LazyLoaderConfigs_']['Register']
+					[$Name[0]].'/'.$Name[1].'.php';
+		else
+			throw new LazyLoaderExceptionsEngine("Name Space Not Found (".
+				implode('/', $Name).") ");
 	}
 }
 

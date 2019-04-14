@@ -12,8 +12,10 @@ class DecimalFieldEngine extends FieldEngine{
 	public $Constraints = [
 		'Require' => True,
 		'Default' => '',
+		'Min_Value' => '',
+		'Max_Value' => '',
 		'Min_Length' => 0,
-		'Max_Length' => 30
+		'Max_Length' => 20
 	];
 
 	function __construct($Constraints){
@@ -27,10 +29,19 @@ class DecimalFieldEngine extends FieldEngine{
 		
 		if ( $Value != False && strlen($Value) >= $this->Constraints['Min_Length'] && 
 								strlen($Value) <= $this->Constraints['Max_Length'] ){
+			
+			if ( $this->Constraints['Min_Value'] !== '' &&
+				$Value < $this->Constraints['Min_Value'] )
+				return False;
+			
+			if ( $this->Constraints['Max_Value'] !== '' &&
+				$Value > $this->Constraints['Max_Value'] )
+				return False;
+
 			$this->Value = $Value;
 			return True;
 		}
-		else if ( $this->Constraints['Default'] == '' )
+		else if ( $this->Constraints['Default'] === '' )
 			return False;
 		else{
 			$this->Value = $this->Constraints['Default'];
